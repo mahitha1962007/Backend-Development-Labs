@@ -1,119 +1,124 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const sqlite = require('sqlite');
+const sqlite3 = require('sqlite3');
 
 const app = express();
 const PORT = 3000;
 
-// Middleware to read JSON data
 app.use(express.json());
 
-// Connect to SQLite database
-const db = new sqlite3.Database(
-    path.join(__dirname, 'books.db'),
-    (err) => {
-        if (err) {
-            console.error('Database connection failed:', err.message);
-        } else {
-            console.log('Connected to SQLite database');
-        }
-    }
-);
+let db;
 
-// Home route
-app.get('/', (req, res) => {
-    res.send('SQLite Database Server is Running!');
-});
+// Initialize database and start server
+const initializeDBAndServer = async () => {
+    try {
+        db = await sqlite.open({
+            filename: './books.db',
+            driver: sqlite3.Database
+        });
+
+        console.log('Connected to SQLite database');
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+
+    } catch (error) {
+        console.log(`Database Error: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+initializeDBAndServer();
 
 // Get all books
-app.get('/books', (req, res) => {
-    db.all('SELECT * FROM books', [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-        } else {
-            res.json(rows);
-        }
-    });
+app.get('/books/', async (req, res) => {
+    try {
+        const books = await db.all('SELECT * FROM books');
+        res.json(books);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
-// Get a book by ID
-app.get('/books/:id', (req, res) => {
-    const id = req.params.id;
 
-    db.get('SELECT * FROM books WHERE id = ?', [id], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
+// Get book by ID
+app.get('/books/:bookId/', async (req, res) => {
+    try {
+        const { bookId } = req.params;
+        const book = await db.get(
+            'SELECT * FROM books WHERE id = ?',
+            [bookId]
+        );
 
-        if (!row) {
+        if (!book) {
             return res.status(404).json({ message: 'Book not found' });
         }
 
-        res.json(row);
-    });
+        res.json(book);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
+// Add a book
+app.post('/books/', async (req, res) => {
+    try {
+        const { title, author, price, pages } = req.body;
 
-// Add a new book
-app.post('/books', (req, res) => {
-    const { title, author, price } = req.body;
+        const result = await db.run(
+            `INSERT INTO books (title, author, price, pages)
+             VALUES (?, ?, ?, ?)`,
+            [title, author, price, pages]
+        );
 
-    db.run(
-        'INSERT INTO books (title, author, price) VALUES (?, ?, ?)',
-        [title, author, price],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-
-            res.status(201).json({
-                message: 'Book added successfully',
-                id: this.lastID
-            });
-        }
-    );
+        res.status(201).json({
+            message: 'Book added successfully',
+            id: result.lastID
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
+
 // Update a book
-app.put('/books/:id', (req, res) => {
-    const { title, author, price } = req.body;
-    const { id } = req.params;
+app.put('/books/:bookId/', async (req, res) => {
+    try {
+        const { bookId } = req.params;
+        const { title, author, price, pages } = req.body;
 
-    db.run(
-        'UPDATE books SET title = ?, author = ?, price = ? WHERE id = ?',
-        [title, author, price, id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
+        const result = await db.run(
+            `UPDATE books
+             SET title = ?, author = ?, price = ?, pages = ?
+             WHERE id = ?`,
+            [title, author, price, pages, bookId]
+        );
 
-            if (this.changes === 0) {
-                return res.status(404).json({ message: 'Book not found' });
-            }
-
-            res.json({ message: 'Book updated successfully' });
+        if (result.changes === 0) {
+            return res.status(404).json({ message: 'Book not found' });
         }
-    );
+
+        res.json({ message: 'Book updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
+
 // Delete a book
-app.delete('/books/:id', (req, res) => {
-    const { id } = req.params;
+app.delete('/books/:bookId/', async (req, res) => {
+    try {
+        const { bookId } = req.params;
 
-    db.run(
-        'DELETE FROM books WHERE id = ?',
-        [id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
+        const result = await db.run(
+            'DELETE FROM books WHERE id = ?',
+            [bookId]
+        );
 
-            if (this.changes === 0) {
-                return res.status(404).json({ message: 'Book not found' });
-            }
-
-            res.json({ message: 'Book deleted successfully' });
+        if (result.changes === 0) {
+            return res.status(404).json({ message: 'Book not found' });
         }
-    );
-});
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+
+        res.json({ message: 'Book deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });

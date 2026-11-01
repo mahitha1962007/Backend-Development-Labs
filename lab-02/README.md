@@ -80,7 +80,13 @@ Columns:
 ![Database Verification](screenshots/database-verification.png)
 
 ## Deployment
-Not deployed. The application was tested locally using Postman and SQLite.
+## Deployment
+
+Platform: Render
+
+Live URL: https://lab-02-books-api.onrender.com
+
+The application is deployed successfully on Render.
 
 ## Problems Faced and Solutions
 1. Postman Cloud Agent could not access localhost. This was resolved by switching to the Desktop Agent.

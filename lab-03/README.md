@@ -1,4 +1,11 @@
 # Lab 3: REST API, Query Parameters, Validation and Debugging
+## Live API Deployment
+
+**Platform:** Render
+
+**Live API URL:** https://lab-03-books-api.onrender.com
+
+**API Endpoint:** https://lab-03-books-api.onrender.com/books
 
 ## Student Details
 
@@ -95,3 +102,16 @@ input validation and appropriate HTTP status codes.
 ## Live API URL
 
 https://lab-03-books-api.onrender.com
+## Live API Testing on Render
+
+### 12. Live Get All Books
+![Live Get All Books](screenshots/12-live-get-books.png)
+
+### 13. Live Search Books
+![Live Search Books](screenshots/13-live-search-books.png)
+
+### 14. Live Price Range Filtering
+![Live Price Filtering](screenshots/14-live-price-filter.png)
+
+### 15. Live Sorting
+![Live Sorting](screenshots/15-live-sort-books.png)

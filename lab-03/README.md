@@ -115,3 +115,33 @@ https://lab-03-books-api.onrender.com
 
 ### 15. Live Sorting
 ![Live Sorting](screenshots/15-live-sort-books.png)
+## Debugging Exercises
+
+### 1. Port Conflict (EADDRINUSE)
+
+**Problem:** The server could not start because the
+port was already being used by another process.
+
+**Solution:** Stopped the previously running server
+using Ctrl + C and restarted the application.
+### 2. Wrong Import Path
+
+**Problem:** The application could not find the
+required module because the import path was incorrect.
+
+**Solution:** Checked the filename and folder location
+and corrected the require() path.
+### 3. Table Name Typo
+
+**Problem:** SQLite returned a "no such table" error
+because the SQL query contained an incorrect table name.
+
+**Solution:** Checked the database schema and corrected
+the table name from book to books.
+### 4. Missing await
+
+**Problem:** The database query was not awaited,
+so the application did not wait for the query result.
+
+**Solution:** Added await before the asynchronous
+database operation and used an async function.

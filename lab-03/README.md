@@ -9,11 +9,13 @@
 
 ## Student Details
 
-- Name: Penta Mahitha
-- Registration Number: [252U1R5121]
-- Section: [AIDE-2B]
-- Course: Backend Development Fundamentals
-- Institution: Aurora
+- **Name:** Penta Mahitha
+- **Registration Number:** 252U1R5121
+- **Section:** AIDE-2B
+- **Course:** Backend Development Fundamentals
+- **Year and Term:** Year II Term II
+- **Institution:** Aurora Deemed University
+- **Faculty:** Yugandhar
 
 ## Objective
 
@@ -31,20 +33,40 @@ and proper error handling.
 
 ## How to Run the Project
 
-1. Clone the repository.
-2. Open the lab-03 folder in VS Code.
-3. Install the dependencies:
+### Prerequisites
+- Node.js
+- npm
+- VS Code
 
-   npm install
+### Step 1: Clone the Repository
 
-4. Start the server:
+git clone https://github.com/mahitha1962007/Backend-Development-Labs.git
 
-   npm start
+### Step 2: Navigate to Lab 3
 
-   (Use node app.js if no start script is configured.)
+cd Backend-Development-Labs/lab-03
 
-5. Open Postman and test the API.
+### Step 3: Install Dependencies
 
+npm install
+
+### Step 4: Start the Server
+
+npm start
+
+### Step 5: Test the API
+
+Open Postman and use the following URL:
+
+http://localhost:3000/books
+
+### Environment Variables
+
+| Variable | Description |
+|---|---|
+| PORT | Port number used by the server |
+
+The default local port is 3000.
 ## API Endpoints
 
 | Method | Endpoint | Description |
@@ -58,6 +80,15 @@ and proper error handling.
 | POST | /books | Add a new book |
 | PUT | /books/:bookId | Update a book |
 | DELETE | /books/:bookId | Delete a book |
+## HTTP Status Codes
+
+| Status Code | Description |
+|---|---|
+| 200 | Request successful |
+| 201 | Book created successfully |
+| 400 | Invalid input or validation error |
+| 404 | Book not found |
+| 500 | Internal server error |
 
 ## Screenshots
 
@@ -94,14 +125,6 @@ and proper error handling.
 ### 11. Book Not Found
 ![Book Not Found](screenshots/11-book-not-found.png)
 
-## Conclusion
-
-The REST API was successfully developed and tested using Postman.
-It supports CRUD operations, query parameters, price filtering,
-input validation and appropriate HTTP status codes.
-## Live API URL
-
-https://lab-03-books-api.onrender.com
 ## Live API Testing on Render
 
 ### 12. Live Get All Books
@@ -145,3 +168,27 @@ so the application did not wait for the query result.
 
 **Solution:** Added await before the asynchronous
 database operation and used an async function.
+## Learning Outcomes
+
+Through this lab, I learned:
+
+- How to develop RESTful APIs using Express.js.
+- How to implement query parameters.
+- How to perform searching, sorting and pagination.
+- How to apply price range filtering.
+- How to validate user input.
+- How to handle HTTP status codes.
+- How to test APIs using Postman.
+- How to debug common backend errors.
+- How to deploy a backend application using Render.
+
+## Conclusion
+
+The REST API was successfully developed and tested using Postman.
+It supports CRUD operations, query parameters, price filtering,
+input validation and appropriate HTTP status codes.
+## Live API URL
+**GitHub Repository:** 
+https://github.com/mahitha1962007/Backend-Development-Labs
+
+https://lab-03-books-api.onrender.com
